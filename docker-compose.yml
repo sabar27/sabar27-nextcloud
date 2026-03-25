@@ -49,7 +49,7 @@ services:
       - nextcloud-net
 
 networks:
-  nexcloud-net:
+  nextcloud-net:
     external: false
   nginx-net:
     external: true
