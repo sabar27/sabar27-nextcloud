@@ -21,7 +21,7 @@ services:
       - nextcloud-net
       - nginx-net
     ports:
-      - "8088:80"
+      - "8086:80"
     depends_on:
       - nextcloud-db
       - nextcloud-redis
