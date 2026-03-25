@@ -1,0 +1,64 @@
+version: "3.8"
+
+services:
+  nextcloud:
+    image: nextcloud:29-apache
+    container_name: nextcloud
+    environment:
+      POSTGRES_HOST: nextcloud-db
+      POSTGRES_DB: nextcloud
+      POSTGRES_USER: nextcloud
+      POSTGRES_PASSWORD: nc_db_pass  # Zmena
+      NEXTCLOUD_ADMIN_USER: sabar_admin
+      NEXTCLOUD_ADMIN_PASSWORD: M0je#Priv4tne#D4ta  # Zmena
+      NEXTCLOUD_TRUSTED_DOMAINS: cloud.barna-tech.com srv1.local
+      REDIS_HOST: nextcloud-redis
+      NEXTCLOUD_UPDATE: 1
+    volumes:
+      - nextcloud_app:/var/www/html
+      - nextcloud_data:/var/www/html/data
+    networks:
+      - nextcloud-net
+      - nginx-net
+    ports:
+      - "8088:80"
+    depends_on:
+      - nextcloud-db
+      - nextcloud-redis
+    restart: unless-stopped
+
+  nextcloud-db:
+    image: postgres:16-alpine
+    container_name: nextcloud-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: nextcloud
+      POSTGRES_USER: nextcloud
+      POSTGRES_PASSWORD: nc_db_pass  # Rovnaké
+    volumes:
+      - nextcloud_db:/var/lib/postgresql/data
+    networks:
+      - nextcloud-net
+
+
+  nextcloud-redis:
+    image: redis:7-alpine
+    container_name: nextcloud-redis
+    command: redis-server --requirepass redis_pass  # Zmena
+    restart: unless-stopped
+    networks:
+      - nextcloud-net
+
+networks:
+  nexcloud-net:
+    external: false
+  nginx-net:
+    external: true
+
+volumes:
+  nextcloud_app:
+    external: true
+  nextcloud_data:
+    external: true
+  nextcloud_db:
+    external: true
