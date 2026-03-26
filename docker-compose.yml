@@ -12,8 +12,8 @@ services:
       NEXTCLOUD_ADMIN_USER: sabar_admin
       NEXTCLOUD_ADMIN_PASSWORD: M0je#Priv4tne#D4ta  # Zmena
       NEXTCLOUD_TRUSTED_DOMAINS: cloud.barna-tech.com srv1.local:8086
-      REDIS_HOST: nextcloud-redis
-      REDIS_PASSWORD: nc#redis#p455word
+     # REDIS_HOST: nextcloud-redis
+     # REDIS_PASSWORD: nc#redis#p455word
       NEXTCLOUD_UPDATE: 1
     volumes:
       - nextcloud_app:/var/www/html
@@ -25,7 +25,7 @@ services:
       - "8086:80"
     depends_on:
       - nextcloud-db
-      - nextcloud-redis
+    #  - nextcloud-redis
     restart: unless-stopped
 
   nextcloud-db:
@@ -41,13 +41,13 @@ services:
     networks:
       - nextcloud-net
 
-  nextcloud-redis:
-    image: redis:7-alpine
-    container_name: nextcloud-redis
-    command: redis-server --requirepass nc#redis#p455word  # Zmena
-    restart: unless-stopped
-    networks:
-      - nextcloud-net
+ # nextcloud-redis:
+ #   image: redis:7-alpine
+ #   container_name: nextcloud-redis
+ #   command: redis-server --requirepass nc#redis#p455word  # Zmena
+ #   restart: unless-stopped
+ #   networks:
+ #     - nextcloud-net
 
 networks:
   nextcloud-net:
